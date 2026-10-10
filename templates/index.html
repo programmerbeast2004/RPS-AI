@@ -710,58 +710,92 @@
         const buttons = document.querySelectorAll('.paper-btn-container');
         let selectedIndex = 0;
         const bgm = document.getElementById('menuBgm');
+        let bgmUnlocked = false;
 
-        // Initialize BGM Playback
+        // Sound Synthesizer via Web Audio API (crisp, zero lag for button clicks/hover)
+        let audioCtx = null;
+        function getAudioContext() {
+            if (!audioCtx) {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (AudioContext) audioCtx = new AudioContext();
+            }
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            return audioCtx;
+        }
+
+        // Global Audio Unlocker & BGM Playback Engine
+        function tryPlayBgm() {
+            if (!bgm || isMuted) return;
+            bgm.volume = 0.35;
+            const playPromise = bgm.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    bgmUnlocked = true;
+                    cleanupUnlockListeners();
+                }).catch(() => {
+                    // Browser prevented immediate autoplay; unlock listeners will trigger on first interaction
+                });
+            }
+        }
+
+        const unlockEvents = ['pointerdown', 'touchstart', 'mousedown', 'keydown', 'click', 'pointermove'];
+        function onUserInteraction() {
+            getAudioContext();
+            if (!isMuted && bgm && bgm.paused) {
+                tryPlayBgm();
+            }
+        }
+
+        function setupUnlockListeners() {
+            unlockEvents.forEach(evt => {
+                window.addEventListener(evt, onUserInteraction, { capture: true, passive: true });
+            });
+        }
+
+        function cleanupUnlockListeners() {
+            unlockEvents.forEach(evt => {
+                window.removeEventListener(evt, onUserInteraction, { capture: true });
+            });
+        }
+
         function initBgm() {
             if (!bgm) return;
             bgm.volume = 0.35;
             
-            // Sync toggle button with persisted state
             const toggleBtn = document.getElementById('soundToggle');
             if (toggleBtn) {
                 toggleBtn.innerHTML = isMuted ? '🔇 <span>Audio: OFF</span>' : '🔊 <span>Audio: ON</span>';
             }
 
             if (!isMuted) {
-                const playPromise = bgm.play();
-                if (playPromise !== undefined) {
-                    playPromise.catch(() => {
-                        // Browser autoplay policy restricted audio; play on first user interaction
-                        const startOnInteraction = () => {
-                            if (!isMuted && bgm.paused) {
-                                bgm.play().catch(() => {});
-                            }
-                            window.removeEventListener('click', startOnInteraction);
-                            window.removeEventListener('touchstart', startOnInteraction);
-                            window.removeEventListener('keydown', startOnInteraction);
-                        };
-                        window.addEventListener('click', startOnInteraction, { once: true });
-                        window.addEventListener('touchstart', startOnInteraction, { once: true });
-                        window.addEventListener('keydown', startOnInteraction, { once: true });
-                    });
-                }
+                tryPlayBgm();
+                setupUnlockListeners();
             }
         }
-
-        // Sound Synthesizer via Web Audio API (crisp, zero lag for button clicks/hover)
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
         function playSound(freq, duration, type = 'sine') {
             if (isMuted) return;
             try {
-                if (audioCtx.state === 'suspended') {
-                    audioCtx.resume();
+                const ctx = getAudioContext();
+                if (!ctx) return;
+                
+                // Also ensure BGM is triggered if paused
+                if (bgm && bgm.paused && !isMuted) {
+                    tryPlayBgm();
                 }
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
+
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
                 osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.frequency.setValueAtTime(freq, ctx.currentTime);
+                gain.gain.setValueAtTime(0.12, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
                 osc.connect(gain);
-                gain.connect(audioCtx.destination);
+                gain.connect(ctx.destination);
                 osc.start();
-                osc.stop(audioCtx.currentTime + duration);
+                osc.stop(ctx.currentTime + duration);
             } catch (e) {}
         }
 
@@ -775,7 +809,10 @@
             if (isMuted) {
                 if (bgm) bgm.pause();
             } else {
-                if (bgm) bgm.play().catch(() => {});
+                if (bgm) {
+                    bgm.volume = 0.35;
+                    bgm.play().catch(() => {});
+                }
             }
         }
 
