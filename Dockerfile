@@ -1,7 +1,6 @@
-# Multi-stage Python 3.10 runtime
 FROM python:3.10-slim
 
-# Install system dependencies for OpenCV and audio
+# Install system dependencies for OpenCV
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \
@@ -9,18 +8,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
-# Install Python requirements
+# Install lightweight CPU-only Python requirements
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application files
 COPY . .
 
-# Expose default web port
-EXPOSE 7860
-EXPOSE 5000
-
-ENV PORT=7860
 ENV PYTHONUNBUFFERED=1
 
-CMD ["gunicorn", "--bind", "0.0.0.0:7860", "--workers", "2", "--timeout", "120", "server:app"]
+# Dynamically bind to Render's $PORT or fallback to 7860/5000 with 1 worker to stay well below 512MB RAM
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:${PORT:-7860} --workers 1 --threads 4 --timeout 120 server:app"]
