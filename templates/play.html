@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rock Paper Scissors • Hand-Drawn Arena</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="/static/assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/assets/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="/static/assets/favicon-64.png">
+  <link rel="apple-touch-icon" href="/static/assets/favicon.png">
+
+  <!-- Typography: Patrick Hand, Caveat, Outfit, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Patrick+Hand&family=Outfit:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@600;700&display=swap" rel="stylesheet">
+
+  <!-- Modular Stylesheets -->
+  <link rel="stylesheet" href="/static/css/styles.css?v=8">
+  <link rel="stylesheet" href="/static/css/components.css?v=8">
+  <link rel="stylesheet" href="/static/css/responsive.css?v=8">
+
+  <!-- Preload Match Reaction Images -->
+  <link rel="preload" as="image" href="/static/assets/image/win.jpeg">
+  <link rel="preload" as="image" href="/static/assets/image/lose.jpeg">
+  <link rel="preload" as="image" href="/static/assets/image/tie.jpeg">
+
+  <!-- MediaPipe 21-Landmark Hand Tracker -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+</head>
+<body class="sketch-theme">
+
+  <div class="notebook-container">
+
+    <!-- 1. Top Navigation & Home Return Bar -->
+    <header class="top-header-row">
+      <!-- Return to Home (Top-Left Corner) -->
+      <a href="/" class="return-home-btn" title="Return to Main Menu (Home)">
+        <span class="home-arrow">←</span>
+        <span class="tab-icon">🏠</span>
+        <span class="home-text">Home</span>
+      </a>
+
+      <!-- Center Navigation Tabs -->
+      <nav class="top-nav-tabs">
+        <a href="/play" class="nav-tab active">
+          <span class="tab-icon">🎮</span>
+          <span>Play</span>
+        </a>
+        <button type="button" class="nav-tab" id="btnStats">
+          <span class="tab-icon">📊</span>
+          <span>Stats</span>
+        </button>
+        <button type="button" class="nav-tab" id="btnHowToPlay">
+          <span class="tab-icon">📖</span>
+          <span>How to Play</span>
+        </button>
+        <button type="button" class="nav-tab" id="btnSettings">
+          <span class="tab-icon">⚙️</span>
+          <span>Settings</span>
+        </button>
+      </nav>
+    </header>
+
+    <!-- Old School Rusty Banner -->
+    <div class="rusty-banner-wrapper">
+      <div class="rusty-banner">
+        <div class="rusty-rivet"></div>
+        <div class="rusty-banner-content">
+          <span class="rusty-banner-title">⚔️ LET'S PLAY • YOU VS ME</span>
+          <span class="rusty-banner-tag">🤖 AI DUEL</span>
+        </div>
+        <div class="rusty-rivet"></div>
+      </div>
+    </div>
+
+    <!-- 2. Match Header Info Panel -->
+    <section class="match-info-card">
+      <!-- Match Format -->
+      <div class="info-section format-section" id="formatDropdownTrigger">
+        <div class="info-icon-badge trophy-badge">🏆</div>
+        <div class="info-text-group">
+          <span class="info-label">Match Format</span>
+          <div class="format-val-row">
+            <span id="formatText" class="info-value">Best of 5</span>
+            <svg class="dropdown-chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </div>
+          <!-- Dropdown Menu -->
+          <div id="formatDropdownMenu" class="format-dropdown-menu">
+            <button type="button" id="format3Btn" class="format-opt">Best of 3</button>
+            <button type="button" id="format5Btn" class="format-opt active">Best of 5</button>
+            <button type="button" id="format10Btn" class="format-opt">Best of 10</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-divider"></div>
+
+      <!-- Round & Progress Dots -->
+      <div class="info-section round-section">
+        <div class="info-icon-badge target-badge">🎯</div>
+        <div class="info-text-group">
+          <span class="info-label">Round</span>
+          <div class="round-progress-wrapper">
+            <span id="roundText" class="info-value">1 / 5</span>
+            <div id="roundDotsContainer" class="round-dots-list">
+              <span class="round-dot active"></span>
+              <span class="round-dot"></span>
+              <span class="round-dot"></span>
+              <span class="round-dot"></span>
+              <span class="round-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="info-divider"></div>
+
+      <!-- Player Score -->
+      <div class="info-section score-section player-score-box">
+        <div class="info-icon-badge user-badge">👤</div>
+        <div class="info-text-group">
+          <span class="info-label">Your Score</span>
+          <span id="scorePlayer" class="score-num player">0</span>
+        </div>
+      </div>
+
+      <!-- VS Chip -->
+      <div class="vs-chip">VS</div>
+
+      <!-- AI Score -->
+      <div class="info-section score-section ai-score-box">
+        <div class="info-icon-badge robot-badge">🤖</div>
+        <div class="info-text-group">
+          <span class="info-label">AI Score</span>
+          <span id="scoreAi" class="score-num ai">0</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. Main Battle Arena (Left: Camera | Center: Countdown | Right: AI Opponent) -->
+    <main class="game-arena-grid">
+
+      <!-- LEFT: Your Camera -->
+      <section class="sketch-panel cam-panel" aria-label="Player Camera Viewport">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="header-icon">📷</span>
+            <span>Your Camera</span>
+          </div>
+          <div id="camLiveBadge" class="live-pill">
+            <span class="live-dot"></span>
+            <span>Live</span>
+          </div>
+        </div>
+
+        <div class="cam-viewport-container">
+          <video id="webcamVideo" autoplay playsinline muted></video>
+          <!-- 21-Landmark Skeleton Canvas Overlay -->
+          <canvas id="landmarkCanvas" class="landmark-canvas"></canvas>
+
+          <!-- Framing Corner Brackets -->
+          <div id="guideBox" class="camera-bracket-frame">
+            <div class="bracket top-left"></div>
+            <div class="bracket top-right"></div>
+            <div class="bracket bottom-left"></div>
+            <div class="bracket bottom-right"></div>
+            <div id="guidePill" class="bracket-label">Position hand</div>
+          </div>
+
+          <!-- Real-Time Hand Detection Badge -->
+          <div id="camStatusBadge" class="hand-detected-pill">NO HAND</div>
+        </div>
+      </section>
+
+      <!-- CENTER: Circular Countdown & VS Hairline -->
+      <section class="arena-center-column" aria-label="Turn Countdown">
+        <div class="countdown-circle-widget">
+          <svg class="circle-svg" viewBox="0 0 100 100">
+            <circle class="circle-track" cx="50" cy="50" r="42"/>
+            <circle id="countdownCircleArc" class="circle-arc" cx="50" cy="50" r="42"/>
+          </svg>
+          <div id="camCountdown" class="countdown-number">3</div>
+        </div>
+        <div id="centerPromptText" class="countdown-subtitle">Get Ready!</div>
+        <div class="center-divider-line">
+          <span class="center-vs-text">VS</span>
+        </div>
+      </section>
+
+      <!-- RIGHT: AI Opponent -->
+      <section class="sketch-panel ai-panel" aria-label="AI Opponent Action">
+        <div class="panel-header">
+          <div class="panel-title">
+            <span class="header-icon">🤖</span>
+            <span>AI Opponent</span>
+          </div>
+          <div id="aiStatusPill" class="ai-status-pill">
+            <span id="aiStatusDots" class="status-dots">•••</span>
+            <span id="aiStatusText">Thinking...</span>
+          </div>
+        </div>
+
+        <div class="ai-viewport-container">
+          <div class="ai-move-sunburst-circle" id="aiCard">
+            <!-- Radial Sketch Action Rays -->
+            <div class="sketch-ray ray-1"></div>
+            <div class="sketch-ray ray-2"></div>
+            <div class="sketch-ray ray-3"></div>
+            <div class="sketch-ray ray-4"></div>
+            <div class="sketch-ray ray-5"></div>
+            <div class="sketch-ray ray-6"></div>
+            <div class="sketch-ray ray-7"></div>
+            <div class="sketch-ray ray-8"></div>
+
+            <div class="gesture-circle-ring">
+              <div id="aiVisual" class="ai-gesture-display">✌️</div>
+            </div>
+          </div>
+          <div id="aiAction" class="ai-gesture-label">READY</div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Hidden compatibility references for game engine state -->
+    <div style="display: none;">
+      <div id="youCard"></div>
+      <div id="youVisual">—</div>
+      <div id="youAction">READY</div>
+      <div id="statusCard"></div>
+      <div id="fillRock"></div><div id="valRock">0%</div>
+      <div id="fillPaper"></div><div id="valPaper">0%</div>
+      <div id="fillScissors"></div><div id="valScissors">0%</div>
+      <button id="btnStart"></button>
+    </div>
+
+    <!-- 4. Bottom Control Bar -->
+    <footer class="bottom-controls-card">
+      <!-- Pause Button -->
+      <button type="button" id="btnPause" class="ctrl-btn pause-btn" title="Pause or Resume Match (P)">
+        <span class="ctrl-icon">⏸</span>
+        <span id="pauseBtnText">Pause</span>
+        <kbd class="ctrl-kbd">P</kbd>
+      </button>
+
+      <!-- Prominent Deep Indigo Watercolor Action Button -->
+      <button type="button" id="btnShoot" class="ctrl-btn shoot-btn" title="Shoot / Play Turn (Space)">
+        <span class="play-triangle">▶</span>
+        <span id="btnShootText">Shoot / Play Turn</span>
+        <kbd class="ctrl-kbd-space">Space</kbd>
+      </button>
+
+      <!-- Reset Button & Auto Toggle -->
+      <div class="right-ctrl-group">
+        <button type="button" id="btnAuto" class="ctrl-btn auto-btn active" title="Toggle Auto Play">
+          <span>Auto: ON</span>
+        </button>
+        <button type="button" id="btnReset" class="ctrl-btn reset-btn" title="Reset Current Match">
+          <span class="ctrl-icon">🔄</span>
+          <span>Reset</span>
+        </button>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Stats & Match History Modal -->
+  <div id="statsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="statsTitle">
+    <div class="modal-panel sketch-modal stats-modal-panel">
+      <div class="modal-head">
+        <h3 id="statsTitle" class="modal-head-title">📊 Match History & Stats</h3>
+        <button type="button" id="btnStatsClose" class="modal-close-icon" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body sketch-modal-body">
+        <!-- Quick Stats Cards -->
+        <div class="stats-summary-grid">
+          <div class="stat-card">
+            <span class="stat-card-num" id="statTotalMatches">0</span>
+            <span class="stat-card-label">Played</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-num" id="statWinRate">0%</span>
+            <span class="stat-card-label">Win Rate</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-card-num" id="statRecord">0W-0L</span>
+            <span class="stat-card-label">Record</span>
+          </div>
+        </div>
+
+        <!-- Scrollable Match History List -->
+        <div class="history-list-section">
+          <div class="history-header-row">
+            <span>Recent Matches</span>
+            <span id="historyCountText">0 recorded</span>
+          </div>
+          <div id="historyListContainer" class="history-items-scroll">
+            <div class="history-empty-msg">Loading history...</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="btnStatsDone" class="ctrl-btn shoot-btn" style="padding: 8px 20px; font-size: 15px;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- How to Play Modal -->
+  <div id="howToPlayModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="htpTitle">
+    <div class="modal-panel sketch-modal">
+      <div class="modal-head">
+        <h3 id="htpTitle" class="modal-head-title">📖 How to Play</h3>
+        <button type="button" id="btnHtpClose" class="modal-close-icon" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body sketch-modal-body">
+        <p>1. <strong>Position your hand</strong> inside the corner frame of the camera.</p>
+        <p>2. Form your gesture clearly:</p>
+        <ul>
+          <li>✊ <strong>Rock</strong> beats Scissors</li>
+          <li>✋ <strong>Paper</strong> beats Rock</li>
+          <li>✌️ <strong>Scissors</strong> beats Paper</li>
+        </ul>
+        <p>3. Press <strong>Space</strong> or click <strong>Shoot / Play Turn</strong> to start the countdown!</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="btnHtpDone" class="ctrl-btn shoot-btn" style="padding: 8px 18px; font-size: 15px;">Got It!</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settingsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+    <div class="modal-panel sketch-modal">
+      <div class="modal-head">
+        <h3 id="settingsTitle" class="modal-head-title">⚙️ Game Settings</h3>
+        <button type="button" id="btnSettingsClose" class="modal-close-icon" aria-label="Close dialog">✕</button>
+      </div>
+      <div class="modal-body sketch-modal-body">
+        <div class="setting-row">
+          <span>Match Format:</span>
+          <div class="format-segmented-group">
+            <button type="button" class="format-seg-btn" data-turns="3">3 Turns</button>
+            <button type="button" class="format-seg-btn active" data-turns="5">5 Turns</button>
+            <button type="button" class="format-seg-btn" data-turns="10">10 Turns</button>
+          </div>
+        </div>
+        <div class="setting-row" style="margin-top: 14px;">
+          <span>Sound Effects:</span>
+          <button type="button" id="btnToggleSound" class="ctrl-btn pause-btn" style="padding: 4px 12px; font-size: 14px;">Sound: ON</button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="btnSettingsDone" class="ctrl-btn shoot-btn" style="padding: 8px 18px; font-size: 15px;">Save & Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Match Victory / Defeat Modal -->
+  <div id="summaryModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-labelledby="summaryTitle">
+    <div class="modal-panel sketch-modal">
+      <div class="modal-head">
+        <h3 id="summaryTitle" class="modal-head-title">Match Completed</h3>
+        <button type="button" id="btnModalClose" class="modal-close-icon" aria-label="Close dialog">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-score-box">
+          <div class="modal-score-lbl">FINAL SCORE</div>
+          <div id="summaryScore" class="modal-score-val">0 — 0</div>
+        </div>
+
+        <!-- Result Meme Image & Mocking/Hype Tagline -->
+        <div class="modal-result-meme-wrapper" id="summaryMemeWrapper">
+          <div class="meme-img-polaroid">
+            <img id="summaryMemeImg" class="modal-result-meme-img" src="/static/assets/image/win.jpeg" alt="Game Result Reaction" loading="eager">
+          </div>
+          <p id="summaryMemeCaption" class="modal-result-meme-caption">GIGACHAD WIN!</p>
+        </div>
+
+        <p id="summaryDesc" class="modal-desc-text"></p>
+      </div>
+
+      <div class="modal-actions">
+        <a href="/" class="ctrl-btn pause-btn modal-exit-btn">Home</a>
+        <button type="button" id="btnModalPlayAgain" class="ctrl-btn shoot-btn modal-play-btn">Play Again</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HAND-DRAWN LANDSCAPE ORIENTATION BARRIER -->
+  <div id="rotateDevicePrompt" class="rotate-device-overlay">
+    <div class="rotate-sketch-card">
+      <!-- Washi tape pin -->
+      <div class="washi-tape"></div>
+
+      <!-- Custom Animated Hand-Drawn SVG Illustration -->
+      <div class="rotate-anim-wrap">
+        <svg class="sketch-rotate-svg" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Motion Arc Arrow -->
+          <path class="motion-arc" d="M 30,35 A 40,40 0 0,1 90,35" stroke="#E8C66A" stroke-width="3" stroke-linecap="round" stroke-dasharray="6,4" fill="none"/>
+          <polygon class="motion-arrow" points="92,30 96,40 86,38" fill="#E8C66A"/>
+          
+          <!-- Stars / Sparkles -->
+          <text x="14" y="24" class="star-doodle star-1" font-size="14" fill="#E8C66A">✦</text>
+          <text x="96" y="86" class="star-doodle star-2" font-size="12" fill="#82B69A">✦</text>
+          <text x="18" y="94" class="star-doodle star-3" font-size="10" fill="#8DAEDC">✧</text>
+          
+          <!-- Rotating Handset -->
+          <g class="rotating-phone-group">
+            <rect x="-18" y="-32" width="36" height="64" rx="8" ry="8" fill="#252E3B" stroke="#46505D" stroke-width="2"/>
+            <rect x="-14" y="-24" width="28" height="48" rx="4" ry="4" fill="#456FB5"/>
+            <text x="0" y="-3" font-size="12" text-anchor="middle" dominant-baseline="middle" fill="#FFFCF5">✊✌️</text>
+            <text x="0" y="11" font-size="8" font-family="'Patrick Hand', cursive" text-anchor="middle" font-weight="bold" fill="#E8C66A">VS</text>
+            <line x1="-5" y1="-28" x2="5" y2="-28" stroke="#667085" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="0" cy="27" r="2.5" fill="#667085"/>
+          </g>
+        </svg>
+      </div>
+
+      <div class="rotate-text-group">
+        <h2 class="rotate-title">FLIP TO PLAY!</h2>
+        <div class="rotate-title-line"></div>
+        <p class="rotate-desc">Turn your phone <strong>sideways (landscape)</strong> to see your camera, opponent, and countdown side-by-side.</p>
+      </div>
+
+      <div class="rotate-sketch-badge">
+        <span>⚔️ LANDSCAPE MODE • 90° FLIP ✨</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Client JavaScript Modules -->
+  <script src="/static/js/ui.js?v=6"></script>
+  <script src="/static/js/cameraUI.js?v=6"></script>
+  <script src="/static/js/gameUI.js?v=6"></script>
+  <script src="/static/js/app.js?v=6"></script>
+  <script>
+    function checkOrientation() {
+      const prompt = document.getElementById('rotateDevicePrompt');
+      if (!prompt) return;
+      const isPortrait = window.innerHeight > window.innerWidth && window.innerWidth <= 900;
+      if (isPortrait) {
+        prompt.style.display = 'flex';
+      } else {
+        prompt.style.display = 'none';
+      }
+    }
+    window.addEventListener('resize', checkOrientation);
+    window.addEventListener('orientationchange', checkOrientation);
+    document.addEventListener('DOMContentLoaded', checkOrientation);
+    checkOrientation();
+  </script>
+</body>
+</html>

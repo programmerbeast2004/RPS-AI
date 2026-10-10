@@ -1,0 +1,456 @@
+/* ==========================================================================
+   ROCK PAPER SCISSORS - PRECISION CROSS-DEVICE RESPONSIVE SYSTEM
+   Flawless fit on Desktops, Laptops, Tablets, iPads, and Mobile screens
+   ========================================================================== */
+
+/* 1. Large Displays & Desktop Laptops (> 1024px) */
+@media (min-width: 1025px) {
+  .game-arena-grid {
+    grid-template-columns: 1fr 130px 1fr;
+    gap: 16px;
+  }
+}
+
+/* 2. Tablets & Small Laptops (681px - 1024px) */
+@media (max-width: 1024px) and (min-width: 681px) {
+  .notebook-container {
+    padding: clamp(4px, 1vh, 8px) clamp(8px, 1.5vw, 12px);
+    gap: clamp(4px, 1vh, 8px);
+  }
+
+  .top-nav-tabs {
+    gap: 8px;
+  }
+
+  .nav-tab {
+    padding: 4px 12px;
+    font-size: 1.05rem;
+  }
+
+  .match-info-card {
+    padding: 4px 12px;
+    gap: 8px;
+  }
+
+  .info-icon-badge {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+
+  .score-num {
+    font-size: 1.35rem;
+  }
+
+  .game-arena-grid {
+    grid-template-columns: 1fr clamp(80px, 10vw, 110px) 1fr;
+    gap: 10px;
+  }
+
+  .countdown-circle-widget {
+    width: clamp(54px, 9vh, 72px);
+    height: clamp(54px, 9vh, 72px);
+  }
+
+  .countdown-number {
+    font-size: clamp(1.8rem, 3.5vh, 2.3rem);
+  }
+
+  .gesture-circle-ring {
+    width: clamp(72px, 13vh, 100px);
+    height: clamp(72px, 13vh, 100px);
+  }
+
+  .ai-gesture-display {
+    font-size: clamp(2.4rem, 4.5vh, 3.2rem);
+  }
+
+  .bottom-controls-card {
+    padding: 5px 12px;
+  }
+
+  .shoot-btn {
+    padding: 7px 24px;
+    font-size: 1.15rem;
+  }
+}
+
+/* 3. Mobile Landscape & Compact Height Viewports (<= 560px height) */
+@media (max-height: 560px) {
+  body {
+    padding: 2px 6px;
+  }
+
+  .notebook-container {
+    padding: 3px 8px;
+    gap: 4px;
+    height: 100vh;
+    height: 100dvh;
+    max-height: 100vh;
+    max-height: 100dvh;
+    overflow: hidden;
+  }
+
+  .top-header-row {
+    padding-bottom: 0;
+  }
+
+  .return-home-btn {
+    padding: 2px 8px;
+    font-size: 0.88rem;
+    gap: 3px;
+    border-radius: 8px 6px 9px 7px;
+  }
+
+  .top-nav-tabs {
+    gap: 5px;
+    padding-bottom: 0;
+  }
+
+  .nav-tab {
+    padding: 2px 8px;
+    font-size: 0.88rem;
+    gap: 3px;
+    border-radius: 8px 6px 9px 7px;
+  }
+
+  .tab-icon {
+    font-size: 0.9rem;
+  }
+
+  .rusty-banner-wrapper {
+    margin: 0;
+  }
+
+  .rusty-banner {
+    padding: 2px 14px;
+    gap: 8px;
+  }
+
+  .rusty-banner-title {
+    font-size: 0.92rem;
+    letter-spacing: 1px;
+    gap: 4px;
+  }
+
+  .rusty-banner-tag {
+    font-size: 0.85rem;
+    padding: 0 5px;
+  }
+
+  .rusty-rivet {
+    width: 6px;
+    height: 6px;
+  }
+
+  /* Single-row Match Info Card */
+  .match-info-card {
+    padding: 3px 10px;
+    gap: 6px;
+    border-radius: 10px;
+  }
+
+  .info-section {
+    gap: 6px;
+  }
+
+  .info-icon-badge {
+    width: 26px;
+    height: 26px;
+    font-size: 0.85rem;
+    border-radius: 6px;
+  }
+
+  .info-label {
+    font-size: 0.72rem;
+  }
+
+  .info-value {
+    font-size: 0.92rem;
+  }
+
+  .score-num {
+    font-size: 1.2rem;
+  }
+
+  .vs-chip {
+    width: 22px;
+    height: 22px;
+    font-size: 0.75rem;
+  }
+
+  /* Side-by-Side Dual Arena Grid */
+  .game-arena-grid {
+    grid-template-columns: 1fr clamp(65px, 9vw, 90px) 1fr;
+    gap: 8px;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .panel-header {
+    padding: 3px 8px;
+  }
+
+  .panel-title {
+    font-size: 0.92rem;
+    gap: 4px;
+  }
+
+  .live-pill, .ai-status-pill {
+    padding: 1px 6px;
+    font-size: 0.75rem;
+  }
+
+  .cam-viewport-container, .ai-viewport-container {
+    min-height: 0;
+    flex: 1 1 0;
+  }
+
+  .camera-bracket-frame {
+    top: 8%;
+    left: 8%;
+    right: 8%;
+    bottom: 8%;
+  }
+
+  .bracket {
+    width: 16px;
+    height: 16px;
+  }
+
+  .hand-detected-pill {
+    bottom: 4px;
+    right: 6px;
+    padding: 1px 6px;
+    font-size: 0.78rem;
+  }
+
+  .countdown-circle-widget {
+    width: clamp(44px, 8vh, 58px);
+    height: clamp(44px, 8vh, 58px);
+    margin-bottom: 2px;
+  }
+
+  .circle-track, .circle-arc {
+    stroke-width: 3.5;
+  }
+
+  .countdown-number {
+    font-size: clamp(1.4rem, 3vh, 1.8rem);
+  }
+
+  .countdown-subtitle {
+    font-size: 0.8rem;
+    margin-bottom: 3px;
+  }
+
+  .center-vs-text {
+    font-size: 0.85rem;
+    padding: 0 4px;
+  }
+
+  .ai-move-sunburst-circle {
+    width: clamp(65px, 12vh, 95px);
+    height: clamp(65px, 12vh, 95px);
+    margin-bottom: 2px;
+  }
+
+  .gesture-circle-ring {
+    width: clamp(52px, 10vh, 76px);
+    height: clamp(52px, 10vh, 76px);
+  }
+
+  .ai-gesture-display {
+    font-size: clamp(1.8rem, 3.8vh, 2.6rem);
+  }
+
+  .ai-gesture-label {
+    font-size: 0.92rem;
+  }
+
+  .sketch-ray {
+    display: none;
+  }
+
+  /* Single-row Bottom Controls */
+  .bottom-controls-card {
+    padding: 3px 10px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+
+  .shoot-btn {
+    padding: 5px clamp(14px, 2.5vw, 24px);
+    font-size: 1.05rem;
+  }
+
+  .pause-btn, .reset-btn, .auto-btn {
+    padding: 4px 10px;
+    font-size: 0.9rem;
+    gap: 4px;
+  }
+
+  .ctrl-kbd, .ctrl-kbd-space {
+    display: none;
+  }
+
+  /* Modals in Compact Landscape */
+  .modal-backdrop {
+    padding: 6px;
+  }
+
+  .sketch-modal {
+    width: min(440px, 92vw);
+    max-height: calc(100vh - 12px);
+    max-height: calc(100dvh - 12px);
+  }
+
+  .modal-head {
+    padding: 6px 12px;
+  }
+
+  .modal-head-title {
+    font-size: 1.1rem;
+  }
+
+  .modal-close-icon {
+    width: 22px;
+    height: 22px;
+    font-size: 0.75rem;
+  }
+
+  .sketch-modal-body, .modal-body {
+    padding: 8px 12px;
+    font-size: 0.95rem;
+    max-height: calc(85dvh - 80px);
+  }
+
+  .modal-score-box {
+    margin-bottom: 4px;
+  }
+
+  .modal-score-val {
+    font-size: 1.8rem;
+  }
+
+  .modal-result-meme-wrapper {
+    margin: 2px 0 6px 0;
+    gap: 4px;
+  }
+
+  .meme-img-polaroid {
+    max-width: 130px;
+    padding: 2px;
+  }
+
+  .modal-result-meme-img {
+    max-height: 65px;
+  }
+
+  .modal-result-meme-caption {
+    font-size: 0.92rem;
+  }
+
+  .modal-actions {
+    padding: 6px 12px;
+    gap: 6px;
+  }
+
+  .modal-play-btn, .modal-exit-btn {
+    padding: 5px 14px;
+    font-size: 0.95rem;
+  }
+
+  .stats-summary-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+
+  .stat-card {
+    padding: 4px 6px;
+  }
+
+  .stat-card-num {
+    font-size: 1.2rem;
+  }
+
+  .stat-card-label {
+    font-size: 0.72rem;
+  }
+
+  .history-items-scroll {
+    max-height: 110px;
+  }
+}
+
+/* 4. Extra Compact Screens / Low Heights (<= 380px height) */
+@media (max-height: 380px) {
+  .top-nav-tabs {
+    gap: 4px;
+  }
+
+  .nav-tab {
+    padding: 1px 8px;
+    font-size: 0.82rem;
+  }
+
+  .rusty-banner {
+    padding: 1px 10px;
+  }
+
+  .rusty-banner-title {
+    font-size: 0.82rem;
+  }
+
+  .match-info-card {
+    padding: 2px 8px;
+  }
+
+  .info-icon-badge {
+    width: 22px;
+    height: 22px;
+    font-size: 0.75rem;
+  }
+
+  .score-num {
+    font-size: 1.05rem;
+  }
+
+  .game-arena-grid {
+    gap: 6px;
+  }
+
+  .countdown-circle-widget {
+    width: 38px;
+    height: 38px;
+  }
+
+  .countdown-number {
+    font-size: 1.25rem;
+  }
+
+  .ai-move-sunburst-circle {
+    width: 55px;
+    height: 55px;
+  }
+
+  .gesture-circle-ring {
+    width: 44px;
+    height: 44px;
+  }
+
+  .ai-gesture-display {
+    font-size: 1.5rem;
+  }
+
+  .shoot-btn {
+    padding: 4px 12px;
+    font-size: 0.95rem;
+  }
+
+  .pause-btn, .reset-btn, .auto-btn {
+    padding: 3px 8px;
+    font-size: 0.82rem;
+  }
+}

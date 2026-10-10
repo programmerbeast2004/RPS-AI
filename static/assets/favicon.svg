@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FCD34D"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E293B"/>
+      <stop offset="100%" stop-color="#0F172A"/>
+    </linearGradient>
+  </defs>
+  <!-- Background Badge -->
+  <circle cx="32" cy="32" r="30" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="2.5"/>
+  <circle cx="32" cy="32" r="26" fill="none" stroke="#456FB5" stroke-width="1.5" stroke-dasharray="3,2"/>
+  
+  <!-- Stylized Victory / Scissors & Rock Gesture Icon -->
+  <g transform="translate(32, 32)">
+    <!-- Wrist -->
+    <path d="M -7,14 L 7,14 L 6,9 L -6,9 Z" fill="url(#goldGrad)"/>
+    <!-- Palm base -->
+    <path d="M -8,9 C -9,4 -9,0 -6,-3 C -5,-4 -3,-4 -2,-2 L -1,5 L 1,5 L 2,-2 C 3,-4 5,-4 6,-3 C 9,0 9,4 8,9 Z" fill="url(#goldGrad)"/>
+    <!-- Extended V-Fingers (Index & Middle) -->
+    <!-- Index Finger -->
+    <path d="M -5,-3 C -6,-6 -8,-12 -7,-15 C -6,-17 -2,-17 -2,-14 L -1,-2 Z" fill="url(#goldGrad)"/>
+    <!-- Middle Finger -->
+    <path d="M 1,-2 L 2,-14 C 2,-17 6,-17 7,-15 C 8,-12 6,-6 5,-3 Z" fill="url(#goldGrad)"/>
+    <!-- Folded Thumb & Fingers -->
+    <ellipse cx="-4" cy="2" rx="3.5" ry="2.5" fill="#1E293B" stroke="url(#goldGrad)" stroke-width="1.2"/>
+    <ellipse cx="4" cy="2" rx="3.5" ry="2.5" fill="#1E293B" stroke="url(#goldGrad)" stroke-width="1.2"/>
+    <!-- Core sparkle -->
+    <polygon points="0,-2 2,-6 0,-10 -2,-6" fill="#FDE68A" opacity="0.9"/>
+  </g>
+</svg>

@@ -1,0 +1,174 @@
+/* ==========================================================================
+   ROCK PAPER SCISSORS - REFINED HAND-DRAWN NOTEBOOK THEME
+   Warm ivory paper background, soft graphite outlines, restrained watercolor accents.
+   ========================================================================== */
+
+:root {
+  /* Background and surfaces */
+  --bg-main: #F5F0E6;
+  --bg-card: #FFFCF5;
+  --bg-secondary: #E8E0D1;
+  --border-color: #D9D2C5;
+  --border-btn: #C9C1B4;
+
+  /* Typography */
+  --text-heading: #252E3B;
+  --text-body: #46505D;
+  --text-secondary: #667085;
+
+  /* Interactive elements */
+  --btn-primary-bg: #456FB5;
+  --btn-primary-hover: #385e9e;
+  --btn-primary-text: #FFFFFF;
+  --nav-selected-bg: #DCE7F7;
+  --nav-selected-text: #252E3B;
+  --btn-secondary-bg: #FFFCF5;
+  --btn-secondary-hover: #F2ECE0;
+
+  /* Game accents */
+  --accent-player: #456FB5;
+  --accent-ai: #D99488;
+  --accent-rock: #E8C66A;
+  --accent-paper: #8DAEDC;
+  --accent-scissors: #82B69A;
+  --accent-live: #82B69A;
+  --countdown-progress: #456FB5;
+  --countdown-track: #E8E0D1;
+
+  /* Semantic Sketchbook Aliases */
+  --bg-paper: var(--bg-main);
+  --bg-paper-card: var(--bg-card);
+  --bg-paper-inset: var(--bg-secondary);
+  --ink-border: var(--border-color);
+  --ink-border-light: #E0D9CB;
+  --ink-dashed: var(--border-btn);
+  --ink-primary: var(--text-heading);
+  --ink-body: var(--text-body);
+  --ink-secondary: var(--text-secondary);
+  --ink-muted: var(--text-secondary);
+
+  /* Watercolor Tint Accents */
+  --watercolor-yellow: var(--accent-rock);
+  --watercolor-yellow-light: #FBF4DE;
+  --watercolor-yellow-border: #C9A440;
+
+  --watercolor-blue: var(--accent-paper);
+  --watercolor-blue-light: #EAF0FA;
+  --watercolor-blue-dark: #456FB5;
+
+  --watercolor-green: var(--accent-scissors);
+  --watercolor-green-light: #E7F3EC;
+  --watercolor-green-dark: #589172;
+
+  --watercolor-pink: var(--accent-ai);
+  --watercolor-pink-light: #FAE8E5;
+  --watercolor-pink-border: #B86558;
+
+  /* Typography Fonts */
+  --font-hand: 'Patrick Hand', 'Caveat', cursive, sans-serif;
+  --font-display: 'Outfit', 'Patrick Hand', sans-serif;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  /* Hand-drawn Radii */
+  --radius-sketch-sm: 8px 6px 9px 7px;
+  --radius-sketch-md: 14px 12px 15px 13px;
+  --radius-sketch-lg: 20px 18px 22px 19px;
+  --radius-sketch-pill: 255px 15px 225px 15px/15px 225px 15px 255px;
+
+  /* Soft Natural Shadows */
+  --shadow-paper: 0 1px 2px rgba(37, 46, 59, 0.05), 0 1px 0 var(--border-color);
+  --shadow-card: 0 2px 6px rgba(37, 46, 59, 0.06), 0 2px 0 var(--border-color);
+  --shadow-btn: 0 2px 0 #315187, 0 3px 6px rgba(69, 111, 181, 0.22);
+  --shadow-btn-pressed: 0 1px 0 #315187, 0 1px 2px rgba(69, 111, 181, 0.15);
+
+  /* Safe Area Insets */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  --transition-normal: 220ms ease;
+}
+
+/* Base Reset */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  width: 100%;
+  min-height: 100vh;
+  min-height: 100dvh;
+  background-color: var(--bg-main);
+  background-image: 
+    radial-gradient(circle at 12% 18%, rgba(232, 224, 209, 0.45) 0%, transparent 35%),
+    radial-gradient(circle at 88% 82%, rgba(220, 231, 247, 0.35) 0%, transparent 40%),
+    radial-gradient(circle at 50% 50%, rgba(255, 252, 245, 0.4) 0%, transparent 50%);
+  color: var(--text-heading);
+  font-family: var(--font-hand);
+  font-size: 16px;
+  line-height: 1.4;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: env(safe-area-inset-top, 6px) env(safe-area-inset-right, 6px) env(safe-area-inset-bottom, 6px) env(safe-area-inset-left, 6px);
+}
+
+/* Custom Sketch Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-btn);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
+  transition: all var(--transition-fast);
+}
+
+button:focus-visible {
+  outline: 2px dashed var(--btn-primary-bg);
+  outline-offset: 3px;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+  filter: grayscale(0.4);
+}

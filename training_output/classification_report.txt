@@ -1,0 +1,15 @@
+Rock-Paper-Scissors Test Evaluation
+Date: Fri Oct  9 23:13:38 2026
+Device: CUDA (NVIDIA GeForce RTX 3050 6GB Laptop GPU)
+Test Accuracy: 98.12%
+Test Loss: 0.0828
+
+              precision    recall  f1-score   support
+
+       paper     1.0000    0.9435    0.9710       124
+        rock     1.0000    1.0000    1.0000       124
+    scissors     0.9466    1.0000    0.9725       124
+
+    accuracy                         0.9812       372
+   macro avg     0.9822    0.9812    0.9812       372
+weighted avg     0.9822    0.9812    0.9812       372

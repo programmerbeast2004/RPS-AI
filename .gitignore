@@ -1,0 +1,29 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Heavy raw training dataset (keep github repo lightweight)
+Rock-Paper-Scissors/
+
+# User-specific runtime logs (keeps match logs private)
+training_output/users/
+training_output/match_history.json
